@@ -4,8 +4,18 @@ class Nodo:
 	def __init__(self, data):
 		self.data = data
 		self.siguiente = None
-
+  
+class ListaSE:
+	def __init__(self):
+		self.cabeza = None
+  		self.cola = None
+  
 #Verificar si la lista está vacía
+def vacio(self):
+		if self.cabeza == None:
+			print("Está vacia")
+		else:
+			print("Lista no vacia")
 
 
 #Contar la cantidad de elementos existentes en la lista
