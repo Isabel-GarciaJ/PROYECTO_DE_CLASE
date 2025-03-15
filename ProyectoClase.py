@@ -94,17 +94,7 @@ class Lista:
 		dx = a - x
 		dy = b - y
 		return math.sqrt(dx**2 + dy**2)  # Raíz cuadrada para obtener la 
-
-#==================== OPCION 1 =========================	
-#Buscar un elemento en la lista usando un método de ordenamiento (Busqueda Lineal)
-def buscarElementoL(lista, valor, pos=0):
-    if pos >= len(lista):  
-        return -1
-    if lista[pos] == valor:  
-        return pos
-    return buscarElementoL(lista, valor, pos + 1)  
-
-#==================== OPCION 2 =========================	
+	
 #Buscar un elemento en la lista usando un método de ordenamiento (Busqueda Binaria)
 def buscarElementoB(lista, valor):
     izq, der = 0, len(lista) - 1  
