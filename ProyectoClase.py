@@ -104,8 +104,3 @@ def buscarElementoL(lista, valor, pos=0):
         return pos
     return buscarElementoL(lista, valor, pos + 1)  
 
-result = buscarElementoB(lista, valor)
-if result != -1:
-    print(f"El elemento se encontro en la posicion{result}")
-else:
-    print("IEl elemento no se encontro")
