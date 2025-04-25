@@ -19,8 +19,7 @@
     #chequear pedido (Una vez pasa el repartidor se coloca peso en cero y pedido en none)
 
 class Pedido:
-	def __init__ (self, listproductos, numpedido, peso, precio):  
-		self.listproductos = listproductos
+	def __init__ (self, numpedido, peso, precio):  
 		self.numpedido = numpedido
 		self.peso = peso
 		self.precio = precio
