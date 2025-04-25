@@ -1,0 +1,14 @@
+Productos,Peso(g)
+Leche,1000
+CocaCola 1.5L,1045
+Harina,500
+Panela,500
+Queso,30
+Jamón,40
+Salchicha,50
+Azúcar,500
+Salchichón,80
+Arepa,100
+Six-Pack Corona,3300
+Cartón de huevos,1800
+ProductoX,2500
