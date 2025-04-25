@@ -13,7 +13,8 @@
 
 #Clase Nodo, capacidad(peso), nodos hijos, pedido(numero de pedido) y metodo para cambiar el pedido
 
-#Pedido (Si se agregan productos usar lectura de archivos),(numero de pedido), peso (si se usan productos, metodo para calcular peso), (precio a cobrar no seeeeee)
+#Pedido (Si se agregan productos usar lectura de archivos),(numero de pedido), peso (si se usan productos,
+#  metodo para calcular peso), (precio a cobrar no seeeeee)
     #imprimir
     #chequear pedido (Una vez pasa el repartidor se coloca peso en cero y pedido en none)
 
