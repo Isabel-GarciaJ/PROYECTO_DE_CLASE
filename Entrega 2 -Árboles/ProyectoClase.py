@@ -17,6 +17,18 @@
     #imprimir
     #chequear pedido (Una vez pasa el repartidor se coloca peso en cero y pedido en none)
 
+class Pedido:
+	def __init__ (self, listproductos, numpedido, peso, precio):  
+		self.listproductos = listproductos
+		self.numpedido = numpedido
+		self.peso = peso
+		self.precio = precio
+	
 #Repartidor: nombre, capacidad y vehiculo,(Lista con numero de pedidos)
+class Repartidor:
+	def __init__ (self, nombre, capacidad, vehiculo):
+		self.nombre = nombre
+		self.capacidad = capacidad
+		self.vehiculo = vehiculo
 
 #Demo: Rutas ya establecidas, metodo para agregar rutas
