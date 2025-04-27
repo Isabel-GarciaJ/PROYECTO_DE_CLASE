@@ -3,6 +3,48 @@
 
 #find_name y find_names: Busca uno o varios nodos por nombre.  
 
+#Clase Nodo, capacidad(peso), nodos hijos, pedido(numero de pedido) y metodo para cambiar el pedido
+class Nodo:
+    def __init__(self, valor):
+        self.valor = valor
+        self.der = None
+        self.izq = None
+
+def obtener_sucesor(actual):
+    actual = actual.der
+    while actual is not None and actual.izq is not None:
+        actual = actual.izq
+    return actual
+
+def eliminar_nodo(raiz, x):
+    if raiz is None:
+        return raiz
+
+    if raiz.valor > x:
+        raiz.izq = eliminar_nodo(raiz.izq, x)
+    elif raiz.valor < x:
+        raiz.der = eliminar_nodo(raiz.der, x)
+    else:
+        if raiz.izq is None:
+            return raiz.der
+        if raiz.der is None:
+            return raiz.izq
+
+        sucesor = obtener_sucesor(raiz)
+        raiz.valor = sucesor.valor
+        raiz.der = eliminar_nodo(raiz.der, sucesor.valor)
+        
+    return raiz
+
+def cambiar_pedido(self, nuevo_pedido):
+        self.pedido = nuevo_pedido
+
+def recorrido_inorden(raiz):
+    if raiz is not None:
+        recorrido_inorden(raiz.izq)
+        print(raiz.valor, end=" ")
+        recorrido_inorden(raiz.der)
+
 # Arbol binario,todos los nodos son pedidos, empleados fijos (repartidor). Altura 3
     #Metodo para peso de las rutas
     #Metodo para decidir que repatidores pueden realizar y que se escoja el de una capacidad más cercana
@@ -10,78 +52,47 @@
     #Eliminar pedido ya recorrido
     #metodo para buscar nodo (numero pedido) con big tree find_name
     #Impripmir
+class ArbolBinario:
+    def __init__(self):
+        self.raiz = None
 
-class Nodo:
-    def __init__(self, valor):
-        self.valor = valor
-        self.der = None
-        self.izq = None
+    def insertar(self, valor):
+        if self.raiz is None:
+            self.raiz = Nodo(valor)
+        else:
+            self.insertar_nodo(self.raiz, valor)
 
-# Note that it is not a generic inorder successor 
-# function. It mainly works when the right child
-# is not empty, which is  the case we need in BST
-# delete.
-def get_successor(curr):
-    curr = curr.der
-    while curr is not None and curr.izq is not None:
-        curr = curr.izq
-    return curr
+    def insertar_nodo(self, nodo, valor):
+        if valor < nodo.valor:
+            if nodo.izq is None:
+                nodo.izq = Nodo(valor)
+            else:
+                self.insertar_nodo(nodo.izq, valor)
+        else:
+            if nodo.der is None:
+                nodo.der = Nodo(valor)
+            else:
+                self.insertar_nodo(nodo.der, valor)
 
-# This function deletes a given key x from the
-# given BST and returns the modified root of the 
-# BST (if it is modified).
-def del_node(root, x):
-  
-    # Base case
-    if root is None:
-        return root
+    def recorrido_inorden(self, nodo):
+        if nodo:
+            self.recorrido_inorden(nodo.izq)
+            print(nodo.valor, end=' ')
+            self.recorrido_inorden(nodo.der)
 
-    # If key to be searched is in a subtree
-    if root.valor > x:
-        root.izq = del_node(root.izq, x)
-    elif root.valor < x:
-        root.der = del_node(root.der, x)
-        
-    else:
-        # If root matches with the given key
+    def recorrido_preorden(self, nodo):
+        if nodo:
+            print(nodo.valor, end=' ')
+            self.recorrido_preorden(nodo.izq)
+            self.recorrido_preorden(nodo.der)
 
-        # Cases when root has 0 children or 
-        # only right child
-        if root.izq is None:
-            return root.der
+    def recorrido_postorden(self, nodo):
+        if nodo:
+            self.recorrido_postorden(nodo.izq)
+            self.recorrido_postorden(nodo.der)
+            print(nodo.valor, end=' ')
 
-        # When root has only left child
-        if root.der is None:
-            return root.izq
 
-        # When both children are present
-        succ = get_successor(root)
-        root.valor = succ.valor
-        root.der = del_node(root.der, succ.valor)
-        
-    return root
-
-# Utility function to do inorder traversal
-def inorder(root):
-    if root is not None:
-        inorder(root.izq)
-        print(root.valor, end=" ")
-        inorder(root.der)
-
-# Driver code
-if __name__ == "__main__":
-    root = Nodo(10)
-    root.izq = Nodo(5)
-    root.der = Nodo(15)
-    root.der.izq = Nodo(12)
-    root.der.der = Nodo(18)
-    x = 15
-
-    root = del_node(root, x)
-    inorder(root)
-    print()
-
-#Clase Nodo, capacidad(peso), nodos hijos, pedido(numero de pedido) y metodo para cambiar el pedido
 
 #Pedido (Si se agregan productos usar lectura de archivos),(numero de pedido), 
 # peso (si se usan productos,metodo para calcular peso), (precio a cobrar no seeeeee)
@@ -93,12 +104,25 @@ class Pedido:
 		self.numpedido = numpedido
 		self.peso = peso
 		self.precio = precio
-	
+
+def imprimir(self):
+        print("Pedido #", self.numpedido, " - Peso: ", self.peso, "kg - Precio: $", self.precio)
+
+def chequear_entrega(self):
+    print("Pedido #", self.numpedido, "entregado.")
+    self.peso = 0
+    self.numpedido = None
+    self.precio = 0
+
+
+
 #Repartidor: nombre, capacidad y vehiculo,(Lista con numero de pedidos)
 class Repartidor:
 	def __init__ (self, nombre, capacidad, vehiculo):
 		self.nombre = nombre
 		self.capacidad = capacidad
 		self.vehiculo = vehiculo
+
+
 
 #Demo: Rutas ya establecidas, metodo para agregar rutas
