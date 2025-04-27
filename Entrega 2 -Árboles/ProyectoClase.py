@@ -5,8 +5,8 @@
 
 #Clase Nodo, capacidad(peso), nodos hijos, pedido(numero de pedido) y metodo para cambiar el pedido
 class Nodo:
-    def __init__(self, valor):
-        self.valor = valor
+    def __init__(self, pedido):
+        self.valor = pedido
         self.der = None
         self.izq = None
 
@@ -20,9 +20,9 @@ def eliminar_nodo(raiz, x):
     if raiz is None:
         return raiz
 
-    if raiz.valor > x:
+    if raiz.pedido > x:
         raiz.izq = eliminar_nodo(raiz.izq, x)
-    elif raiz.valor < x:
+    elif raiz.pedido < x:
         raiz.der = eliminar_nodo(raiz.der, x)
     else:
         if raiz.izq is None:
@@ -31,8 +31,8 @@ def eliminar_nodo(raiz, x):
             return raiz.izq
 
         sucesor = obtener_sucesor(raiz)
-        raiz.valor = sucesor.valor
-        raiz.der = eliminar_nodo(raiz.der, sucesor.valor)
+        raiz.pedido = sucesor.pedido
+        raiz.der = eliminar_nodo(raiz.der, sucesor.pedido)
         
     return raiz
 
@@ -42,7 +42,7 @@ def cambiar_pedido(self, nuevo_pedido):
 def recorrido_inorden(raiz):
     if raiz is not None:
         recorrido_inorden(raiz.izq)
-        print(raiz.valor, end=" ")
+        print(raiz.pedido, end=" ")
         recorrido_inorden(raiz.der)
 
 # Arbol binario,todos los nodos son pedidos, empleados fijos (repartidor). Altura 3
