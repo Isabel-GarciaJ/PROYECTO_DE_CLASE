@@ -5,11 +5,74 @@
 
 #Clase Nodo, capacidad(peso), nodos hijos, pedido(numero de pedido) y metodo para cambiar el pedido
 class Nodo:
-    def __init__(self, valor):
-        self.valor = valor
+    def __init__(self, pedido):
+        self.pedido = pedido 
+        self.peso = self.pedido.peso
         self.der = None
         self.izq = None
 
+#Pedido (Si se agregan productos usar lectura de archivos),(numero de pedido), 
+# peso (si se usan productos,metodo para calcular peso), (precio a cobrar no seeeeee)
+
+class Pedido:
+    def __init__ (self, numpedido, peso, precio):  
+        self.numpedido = numpedido
+        self.peso = peso
+        self.precio = precio
+    
+    #imprimir el pedido
+    def imprimir(self):
+        print("Pedido #", self.numpedido, " - Peso: ", self.peso, "kg - Precio: $", self.precio)
+
+    #Metodo para que repartidor entregue el pedido
+    def chequear_entrega(self):
+        print("Pedido #", self.numpedido, "entregado.")
+        self.peso = 0
+        self.numpedido = None
+        self.precio = 0
+    
+
+#Repartidor: nombre, capacidad y vehiculo,(Lista con numero de pedidos)
+class Repartidor:
+    def __init__ (self, nombre, capacidad, vehiculo):
+        self.nombre = nombre
+        self.capacidad = capacidad
+        self.vehiculo = vehiculo       
+
+#Almacen la ultima lagrima
+class Almacen:
+    def __init__ (self):
+        self.productos = []
+        self.arbol = ArbolBinario()
+        self.repartidores = []
+        self.pedidos = []
+    
+    #metodo para llenar el arbol con los pedidos
+
+    #metodo para llenar los productos del almacen
+
+    #metodo para contratar (construir) repartidores
+    def contratarRepartidor(self, nombre, capacidad, vehiculo):
+        self.repartidores.append(Repartidor(nombre, capacidad, vehiculo))
+
+    #metodo para entregar los pedidos
+    def rutaDomicilio(self):
+        difMin = float('inf')
+        peso, ruta = self.arbol.rutaPesada()
+        repar = None
+        for repartidor in self.repartidores:
+            dif = repartidor.capacidad - peso
+            if dif < difMin and dif > 0:
+                dif - peso
+                repar = repartidor
+        print("El repartidor ", repar.nombre, "realizara los domicilios")
+        for pedido in ruta:
+            pedido.chequear_entrega()
+        
+
+
+
+#posibles metodos a agregar
 def obtener_sucesor(actual):
     actual = actual.der
     while actual is not None and actual.izq is not None:
@@ -53,15 +116,18 @@ def recorrido_inorden(raiz):
     #metodo para buscar nodo (numero pedido) con big tree find_name
     #Impripmir
 class ArbolBinario:
+    #Constructor de un árbol binario de busqueda
     def __init__(self):
         self.raiz = None
 
+    #Metodo para insertar un nodo, valor es el peso del pedido
     def insertar(self, valor):
         if self.raiz is None:
             self.raiz = Nodo(valor)
         else:
             self.insertar_nodo(self.raiz, valor)
 
+    #Metodo para insertar un nodo teniendo en cuenta su peso, valor es el peso del pedido
     def insertar_nodo(self, nodo, valor):
         if valor < nodo.valor:
             if nodo.izq is None:
@@ -74,55 +140,51 @@ class ArbolBinario:
             else:
                 self.insertar_nodo(nodo.der, valor)
 
+    #metodo para obtener la ruta con mayor peso
+    def rutaPesada(self):
+        assert self.raiz is not None
+        peso, ruta = self.rutaPesada1(self.raiz)
+        return peso, ruta
+
+    #Metodo para encontrar la ruta con mayor peso
+    def rutaPesada1(self, nodo):
+        assert nodo is not None
+
+        if not nodo.izq and not nodo.der:
+          return nodo.peso, [nodo]
+        
+        pesoIzq, rutaIzq = float('-inf'), []
+        pesoDer, rutaDer = float('-inf'), []
+
+        if nodo.izq is not None:
+            pesoIzq, rutaIzq = self.rutaPesada1(nodo.izq)
+        if nodo.der is not None:
+            pesoDer, rutaDer =  self.rutaPesada1(nodo.der)
+
+        if pesoIzq > pesoDer:
+            return nodo.peso + pesoIzq, [nodo] + rutaIzq
+        else:
+            return nodo.peso + pesoDer, [nodo] + rutaDer
+
+    #Metodo para recorrer el arbol en inorden
     def recorrido_inorden(self, nodo):
         if nodo:
             self.recorrido_inorden(nodo.izq)
             print(nodo.valor, end=' ')
             self.recorrido_inorden(nodo.der)
 
+    #metodo para recorrer el arbol en preorden
     def recorrido_preorden(self, nodo):
         if nodo:
             print(nodo.valor, end=' ')
             self.recorrido_preorden(nodo.izq)
             self.recorrido_preorden(nodo.der)
 
+    #metodo para recorrer el arbol en postorden
     def recorrido_postorden(self, nodo):
         if nodo:
             self.recorrido_postorden(nodo.izq)
             self.recorrido_postorden(nodo.der)
             print(nodo.valor, end=' ')
-
-
-
-#Pedido (Si se agregan productos usar lectura de archivos),(numero de pedido), 
-# peso (si se usan productos,metodo para calcular peso), (precio a cobrar no seeeeee)
-    #imprimir
-    #chequear pedido (Una vez pasa el repartidor se coloca peso en cero y pedido en none)
-
-class Pedido:
-	def __init__ (self, numpedido, peso, precio):  
-		self.numpedido = numpedido
-		self.peso = peso
-		self.precio = precio
-
-def imprimir(self):
-        print("Pedido #", self.numpedido, " - Peso: ", self.peso, "kg - Precio: $", self.precio)
-
-def chequear_entrega(self):
-    print("Pedido #", self.numpedido, "entregado.")
-    self.peso = 0
-    self.numpedido = None
-    self.precio = 0
-
-
-
-#Repartidor: nombre, capacidad y vehiculo,(Lista con numero de pedidos)
-class Repartidor:
-	def __init__ (self, nombre, capacidad, vehiculo):
-		self.nombre = nombre
-		self.capacidad = capacidad
-		self.vehiculo = vehiculo
-
-
 
 #Demo: Rutas ya establecidas, metodo para agregar rutas
