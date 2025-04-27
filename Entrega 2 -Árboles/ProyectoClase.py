@@ -65,12 +65,9 @@ class Almacen:
             if dif < difMin and dif > 0:
                 dif - peso
                 repar = repartidor
-        print("El repartidor ", repar.nombre, "realizara los domicilios")
+        print("El repartidor ", repar.nombre, " realizara los domicilios")
         for pedido in ruta:
             pedido.chequear_entrega()
-        
-
-
 
 #posibles metodos a agregar
 def obtener_sucesor(actual):
@@ -188,3 +185,16 @@ class ArbolBinario:
             print(nodo.valor, end=' ')
 
 #Demo: Rutas ya establecidas, metodo para agregar rutas
+# Crear almacen
+almacen = Almacen()
+
+# Contratar repartidores
+almacen.contratarRepartidor("Gabriel", 50, "Moto")
+almacen.contratarRepartidor("Mariana", 30, "Bicicleta")
+
+# Ejecutar ruta de domicilio
+almacen.rutaDomicilio()
+
+# Mostrar pedidos restantes
+print("\nPedidos restantes después de la entrega:")
+almacen.arbol.recorrido_inorden(almacen.arbol.raiz)
