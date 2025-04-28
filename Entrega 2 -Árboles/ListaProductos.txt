@@ -11,4 +11,4 @@ Salchichón,80
 Arepa,100
 Six-Pack Corona,3300
 Cartón de huevos,1800
-ProductoX,2500
+ProductoX,25000
