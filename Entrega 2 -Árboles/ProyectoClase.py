@@ -1,9 +1,5 @@
-#Big tree
-#find_attr y find_attrs: Busca uno o varios nodos por atributo.
 
-#find_name y find_names: Busca uno o varios nodos por nombre.  
-
-
+#Clase Producto con nombre y peso
 class Producto:
     def __init__(self, nombre, peso):
         self.nombre = nombre
