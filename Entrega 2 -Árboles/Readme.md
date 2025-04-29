@@ -6,7 +6,7 @@ El proyecto tiene como objetivo diseñar e implementar un sistema que permita en
 El sistema ayuda al mensajero a entregar los pedidos de manera eficiente, ya que, incluye algunas funcionalidades prácticas que le permite realizar tareas como: verificar si hay pedidos pendientes, calcular la mejor ruta de entregas según el peso de los pedidos, asignar repartidores adecuados según la carga, y eliminar pedidos entregados para actualizar el sistema. 
 
 ## Librerias usadas:
-
+No se usó ninguna librería de python.
 
 ## Integrantes del Grupo:
 - 2240079 – Isabel Sofía García Joya 
