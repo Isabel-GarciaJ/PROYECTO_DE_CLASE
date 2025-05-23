@@ -42,7 +42,7 @@ def calcular_distancia(nodo1, nodo2):
 	return math.sqrt(dx**2 + dy**2)  # Raíz cuadrada para obtener la distancia
     
 
-    
+# Elimminar elementos
 #metodo para eliminar sucursales y aristas de sucursales
 def eliminar_sucursal_arista(grafo, nombre):
     if nombre not in grafo.sucursales:
@@ -57,6 +57,8 @@ def eliminar_sucursal_arista(grafo, nombre):
         del grafo.relaciones[nodo]
     del grafo.sucursales[nombre]
 
+
+# Buscar elementos
 # metodo para encontrar el camino minimo para entregar pedidos
 
 
@@ -130,6 +132,3 @@ g.agregar_arista("B", "D")
 print(g.grafo)  # {'A': ['B', 'C'], 'B': ['A', 'D'], 'C': ['A'], 'D': ['B']}
 print(g.obtener_vecinos("A"))  # ['B', 'C']
 
-
-# Elimminar elementos
-# Buscar elementos
