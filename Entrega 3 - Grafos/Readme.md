@@ -1,8 +1,8 @@
 # Proyecto de Clase
 
 ## Contextualización del Problema 
-El proyecto tiene como objetivo diseñar e implementar un sistema que permita encontrar las rutas más corta para realizar una entrega. El supermercado la Última Lágrima cuenta con una bodega, la cual reparte suministros para reabastecer las diferentes sucursales. 
-Este programa ayudará a los domiciliarios a conocer la mejor ruta para completar los pedidos que deben ser entregados a las sucursales que lo requieran. También permitirá eliminar las sucursales clausuradas y añadir las nuevas sucursales.
+El proyecto tiene como objetivo diseñar e implementar un sistema que permita encontrar la ruta más corta para realizar una entrega. El supermercado "La Última Lágrima" cuenta con una bodega, la cual reparte suministros para reabastecer las diferentes sucursales de este supermercado.
+Este programa ayudará a los domiciliarios a conocer la ruta más corta para completar los pedidos que deben ser entregados a las sucursales que lo requieran. También permitirá eliminar las sucursales clausuradas y añadir las nuevas sucursales.
 
 ## Librerias usadas:
 Las librerías de python que fueron usadas son:
