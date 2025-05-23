@@ -21,11 +21,17 @@ class Arista(object):
     def __str__(self):
         return str(self.elemento) + str(self.peso)
 
+# Insertar elementos
 #metodo para agregar sucursal dependiendo de la distancia con carrera y calle
 def addsucursal(grafo, calle, carrera, nombre):
-    nodo = Nodo(grafo, calle, carrera, nombre)
-    for sucursal in grafo.sucursales:
-        relacionar(grafo, nodo, sucursal, nombre)
+    nueva_sucursal = Nodo(calle, carrera, nombre)
+    grafo.sucursales[nombre] = nueva_sucursal
+    grafo.agregar_nodo(nueva_sucursal)
+    for difnombre, difsucursal in grafo.sucursales.items():
+        if difnombre == nombre:
+            continue  # No se conecta consigo misma
+        distancia = calcular_distancia(nueva_sucursal, difsucursal)
+        grafo.agregar_arista(nueva_sucursal, difsucursal, distancia)
 
 #calcular la distancia entre nodos
 def calcular_distancia(nodo1, nodo2):
@@ -34,6 +40,8 @@ def calcular_distancia(nodo1, nodo2):
 	dx = abs(a - x) # obtener valor absoluto
 	dy = abs(b - y)
 	return math.sqrt(dx**2 + dy**2)  # Raíz cuadrada para obtener la distancia
+    
+
     
 #metodo para eliminar sucursales y aristas de sucursales
 def eliminar_sucursal_arista(grafo, nombre):
@@ -121,8 +129,6 @@ g.agregar_arista("B", "D")
 
 print(g.grafo)  # {'A': ['B', 'C'], 'B': ['A', 'D'], 'C': ['A'], 'D': ['B']}
 print(g.obtener_vecinos("A"))  # ['B', 'C']
-
-# Insertar elementos
 
 
 # Elimminar elementos
