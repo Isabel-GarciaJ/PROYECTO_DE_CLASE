@@ -21,6 +21,7 @@ class Arista(object):
     def __str__(self):
         return str(self.elemento) + str(self.peso)
 
+
 # Insertar elementos
 #metodo para agregar sucursal dependiendo de la distancia con carrera y calle
 def addsucursal(grafo, calle, carrera, nombre):
@@ -60,8 +61,6 @@ def eliminar_sucursal_arista(grafo, nombre):
 
 # Buscar elementos
 # metodo para encontrar el camino minimo para entregar pedidos
-
-
 def agregar(grafo, elemento):
     grafo.relaciones.update({elemento:[]})
 
