@@ -124,9 +124,13 @@ def menorValorNoProcesado(etiquetas, procesados):
 
 # Crear un grafo no dirigido
 g = Grafo()
-g.agregar_arista("A", "B")
-g.agregar_arista("A", "C")
-g.agregar_arista("B", "D")
+# Crear nodos (sucursales) predefinidos
+nodos = [
+    Nodo(1, 1, "Sucursal A"),
+    Nodo(3, 5, "Sucursal B"),
+    Nodo(6, 2, "Sucursal C"),
+    Nodo(8, 8, "Sucursal D")
+]
 
 print(g.grafo)  # {'A': ['B', 'C'], 'B': ['A', 'D'], 'C': ['A'], 'D': ['B']}
 print(g.obtener_vecinos("A"))  # ['B', 'C']
