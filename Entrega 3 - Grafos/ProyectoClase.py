@@ -6,8 +6,22 @@ class Grafo(object):
     def __init__(self):
         self.relaciones = {}
         self.sucursales = {}
+        
     def __str__(self):
         return str(self.relaciones)
+    
+    def agregar_nodo(self, nodo):
+        if nodo not in self.relaciones:
+            self.relaciones[nodo] = []
+
+    def agregar_arista(self, nodo1, nodo2, peso=1):
+        if nodo1 not in self.relaciones:
+            self.agregar_nodo(nodo1)
+        if nodo2 not in self.relaciones:
+            self.agregar_nodo(nodo2)
+        # grafo no dirigido, agregamos ambas direcciones
+        self.relaciones[nodo1].append(Arista(nodo2, peso))
+        self.relaciones[nodo2].append(Arista(nodo1, peso))
 
 class Nodo():
     def __init__(self, calle, carrera, nombre):
