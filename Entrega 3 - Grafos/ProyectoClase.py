@@ -3,9 +3,11 @@ import heapq
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
 class Nodo:
-    def __init__(self, nombre):
+    def __init__(self, nombre, calle, carrera, nlocal):
         self.nombre = nombre
+        self.direccion = [calle, carrera, nlocal]
         self.vecinos = {}
 
     def agregar_vecino(self, vecino, peso):
@@ -17,14 +19,28 @@ class Nodo:
 
     def obtener_grado(self):
         return len(self.vecinos)
+    
+    def str_direccion(self):
+        return str("calle ", self.calle, " #", self.carrera, " - ", self.nlocal)
+    def __str__(self):
+        return str("El local ", self.nombre, " ubicado en la calle ", self.calle, " #", self.carrera, " - ", self.nlocal)
+    
+#calcular la distancia entre nodos
+def calcular_distancia(nodo1, nodo2):
+    x, y, z = nodo1.direccion
+    a, b, c= nodo2.direccion
+    dx = abs(a - x)
+    dy = abs(b - y)
+    dz = abs(c-z)
+    return int(math.sqrt(dx**2 + dy**2 + dz**2))
 
 class Grafo:
     def __init__(self):
         self.nodos = {}
 
-    def agregar_nodo(self, nombre):
-        if nombre not in self.nodos:
-            self.nodos[nombre] = Nodo(nombre)
+    def agregar_nodo(self, nodo):
+        if nodo not in self.nodos:
+            self.nodos[nodo.nombre] = nodo
 
     def eliminar_nodo(self, nombre):
         if nombre in self.nodos:
@@ -32,9 +48,11 @@ class Grafo:
                 nodo.eliminar_vecino(nombre)
             del self.nodos[nombre]
 
-    def agregar_arista(self, origen, destino, peso):
-        self.agregar_nodo(origen)
-        self.agregar_nodo(destino)
+    def agregar_arista(self, origen, destino):
+        if origen not in self.nodos or destino not in self.nodos:
+            print("Error: uno o ambos nodos no existen.")
+            return
+        peso = calcular_distancia(self.nodos[origen], self.nodos[destino])
         self.nodos[origen].agregar_vecino(destino, peso)
         self.nodos[destino].agregar_vecino(origen, peso)
 
@@ -110,6 +128,12 @@ class Grafo:
         plt.title("Ruta más corta destacada")
         plt.show()
 
+def agregar_sucursal(grafo, nodo):
+    grafo.agregar_nodo(nodo)
+    for nombre, otro_nodo in grafo.nodos.items():
+        if otro_nodo.nombre != nodo.nombre:
+            grafo.agregar_arista(nodo.nombre, otro_nodo.nombre)
+
 def reconstruir_camino(anteriores, inicio, destino):
         camino = []
         actual = destino
@@ -137,7 +161,10 @@ def menu(grafo):
 
         if opcion == '1':
             nombre = input("Nombre de la nueva sucursal: ")
-            grafo.agregar_nodo(nombre)
+            calle = int(input("Ingrese la calle: "))
+            carrera = int(input("Ingrese la carrera: "))
+            nlocal = int(input("Ingrese el numero del local:"))
+            grafo.agregar_nodo(Nodo(nombre, calle,carrera, nlocal))
 
         elif opcion == '2':
             nombre = input("Nombre de la sucursal a eliminar: ")
@@ -146,8 +173,7 @@ def menu(grafo):
         elif opcion == '3':
             origen = input("Sucursal origen: ")
             destino = input("Sucursal destino: ")
-            peso = float(input("Distancia (peso): "))
-            grafo.agregar_arista(origen, destino, peso)
+            grafo.agregar_arista(origen, destino)
 
         elif opcion == '4':
             origen = input("Sucursal origen: ")
@@ -181,11 +207,15 @@ def menu(grafo):
 
 # Crear el grafo y agregar nodos/conexiones iniciales
 grafo = Grafo()
-grafo.agregar_arista('A', 'B', 5)
-grafo.agregar_arista('A', 'C', 10)
-grafo.agregar_arista('B', 'D', 3)
-grafo.agregar_arista('C', 'D', 4)
-grafo.agregar_arista('D', 'E', 2)
-grafo.agregar_arista('B', 'E', 9)
+A = Nodo("s-1", 12, 23, 13)
+B = Nodo("s-2", 7, 45, 27)
+C= Nodo("s-3", 23, 15,21)
+D = Nodo("s-4", 45, 67, 41)
+E = Nodo("La ultima lagrima", 10, 27 , 52)
+agregar_sucursal(grafo, A)
+agregar_sucursal(grafo, B)
+agregar_sucursal(grafo, C)
+agregar_sucursal(grafo, D)
+agregar_sucursal(grafo, E)
 
 menu(grafo)
