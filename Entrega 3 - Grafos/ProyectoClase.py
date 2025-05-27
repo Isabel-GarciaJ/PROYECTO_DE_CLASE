@@ -1,129 +1,191 @@
-from collections import deque
 import math
 import heapq
+import networkx as nx
+import matplotlib.pyplot as plt
 
-class Grafo(object):
-    def __init__(self):
-        self.relaciones = {}
-        self.sucursales = {}
-        
-    def __str__(self):
-        return str(self.relaciones)
-    
-    def agregar_nodo(self, nodo):
-        if nodo not in self.relaciones:
-            self.relaciones[nodo] = []
-
-    def agregar_arista(self, nodo1, nodo2, peso=1):
-        if nodo1 not in self.relaciones:
-            self.agregar_nodo(nodo1)
-        if nodo2 not in self.relaciones:
-            self.agregar_nodo(nodo2)
-        # grafo no dirigido, agregamos ambas direcciones
-        self.relaciones[nodo1].append(Arista(nodo2, peso))
-        self.relaciones[nodo2].append(Arista(nodo1, peso))
-
-class Nodo():
-    def __init__(self, calle, carrera, nombre):
+class Nodo:
+    def __init__(self, nombre):
         self.nombre = nombre
-        self.direccion = [calle, carrera]
-        self.pedido = False
+        self.vecinos = {}
+
+    def agregar_vecino(self, vecino, peso):
+        self.vecinos[vecino] = peso
+
+    def eliminar_vecino(self, vecino):
+        if vecino in self.vecinos:
+            del self.vecinos[vecino]
+
+    def obtener_grado(self):
+        return len(self.vecinos)
+
+class Grafo:
+    def __init__(self):
+        self.nodos = {}
+
+    def agregar_nodo(self, nombre):
+        if nombre not in self.nodos:
+            self.nodos[nombre] = Nodo(nombre)
+
+    def eliminar_nodo(self, nombre):
+        if nombre in self.nodos:
+            for nodo in self.nodos.values():
+                nodo.eliminar_vecino(nombre)
+            del self.nodos[nombre]
+
+    def agregar_arista(self, origen, destino, peso):
+        self.agregar_nodo(origen)
+        self.agregar_nodo(destino)
+        self.nodos[origen].agregar_vecino(destino, peso)
+        self.nodos[destino].agregar_vecino(origen, peso)
+
+    def eliminar_arista(self, origen, destino):
+        if origen in self.nodos:
+            self.nodos[origen].eliminar_vecino(destino)
+        if destino in self.nodos:
+            self.nodos[destino].eliminar_vecino(origen)
+
+    def dijkstra(self, inicio):
+        distancias = {nodo: math.inf for nodo in self.nodos}
+        anteriores = {nodo: None for nodo in self.nodos}
+        distancias[inicio] = 0
+        visitados = set()
+        heap = [(0, inicio)]
+
+        while heap:
+            distancia_actual, nodo_actual = heapq.heappop(heap)
+
+            if nodo_actual in visitados:
+                continue
+            visitados.add(nodo_actual)
+
+            for vecino, peso in self.nodos[nodo_actual].vecinos.items():
+                nueva_distancia = distancia_actual + peso
+                if nueva_distancia < distancias[vecino]:
+                    distancias[vecino] = nueva_distancia
+                    anteriores[vecino] = nodo_actual
+                    heapq.heappush(heap, (nueva_distancia, vecino))
+
+        return distancias, anteriores
+
+    def visualizar_grafo(self):
+        G = nx.Graph()
+        for nombre, nodo in self.nodos.items():
+            for vecino, peso in nodo.vecinos.items():
+                if not G.has_edge(nombre, vecino):
+                    G.add_edge(nombre, vecino, weight=peso)
+        pos = nx.spring_layout(G)
+        labels = nx.get_edge_attributes(G, 'weight')
+        nx.draw(G, pos, with_labels=True, node_color='skyblue', node_size=2000, font_size=10, font_weight='bold')
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+        plt.title("Red de Entrega - Supermercado La Última Lágrima")
+        plt.show()
     
-class Arista(object):
-    def __init__(self, elemento, peso):
-        self.elemento = elemento
-        self.peso = peso
-    def __str__(self):
-        return str(self.elemento) + str(self.peso)
+    def visualizar_camino(self, camino):
+        if not camino or len(camino) < 2:
+            print("No hay camino válido para mostrar.")
+            return
 
+        G = nx.Graph()
+        for nombre, nodo in self.nodos.items():
+            for vecino, peso in nodo.vecinos.items():
+                G.add_edge(nombre, vecino, weight=peso)
 
-# Insertar elementos
-#metodo para agregar sucursal dependiendo de la distancia con carrera y calle
-def addsucursal(grafo, calle, carrera, nombre):
-    nueva_sucursal = Nodo(calle, carrera, nombre)
-    grafo.sucursales[nombre] = nueva_sucursal
-    grafo.agregar_nodo(nueva_sucursal)
-    for difnombre, difsucursal in grafo.sucursales.items():
-        if difnombre == nombre:
-            continue  # No se conecta consigo misma
-        distancia = calcular_distancia(nueva_sucursal, difsucursal)
-        grafo.agregar_arista(nueva_sucursal, difsucursal, distancia)
+        pos = nx.spring_layout(G)
+        labels = nx.get_edge_attributes(G, 'weight')
 
-#calcular la distancia entre nodos
-def calcular_distancia(nodo1, nodo2):
-	x, y = nodo1.direccion
-	a, b = nodo2.direccion
-	dx = abs(a - x) # obtener valor absoluto
-	dy = abs(b - y)
-	return math.sqrt(dx**2 + dy**2)  # Raíz cuadrada para obtener la distancia
-    
+        edge_colors = []
+        edge_list = []
 
-# Elimminar elementos
-#metodo para eliminar sucursales y aristas de sucursales
-def eliminar_sucursal_arista(grafo, nombre):
-    if nombre not in grafo.sucursales:
-        print("Sucursal no encontrada")
-        return
-    nodo = grafo.sucursales[nombre]
+        for edge in G.edges():
+            if edge in zip(camino, camino[1:]) or (edge[1], edge[0]) in zip(camino, camino[1:]):
+                edge_colors.append('red')  # Camino más corto
+            else:
+                edge_colors.append('black')  # Conexiones normales
+            edge_list.append(edge)
 
-    for nodo_origen, aristas in grafo.relaciones.items():
-        grafo.relaciones[nodo_origen] = [arista for arista in aristas if arista.elemento != nodo]
+        nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=2000, font_size=10, font_weight='bold')
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+        nx.draw_networkx_edges(G, pos, edgelist=edge_list, edge_color=edge_colors, width=2)
 
-    if nodo in grafo.relaciones:
-        del grafo.relaciones[nodo]
-    del grafo.sucursales[nombre]
+        plt.title("Ruta más corta destacada")
+        plt.show()
 
+def reconstruir_camino(anteriores, inicio, destino):
+        camino = []
+        actual = destino
+        while actual is not None:
+            camino.insert(0, actual)
+            actual = anteriores[actual]
+        if camino[0] == inicio:
+            return camino
+        else:
+            return None  # No hay camino
+        
+# Sistema de interacción por consola
+def menu(grafo):
+    while True:
+        print("\n--- MENÚ ---")
+        print("1. Agregar sucursal")
+        print("2. Eliminar sucursal")
+        print("3. Agregar conexión entre sucursales")
+        print("4. Eliminar conexión")
+        print("5. Calcular rutas desde una sucursal")
+        print("6. Visualizar grafo")
+        print("0. Salir")
 
-# Buscar elementos
-# metodo para encontrar el camino minimo para entregar pedidos
+        opcion = input("Selecciona una opción: ")
 
-def camino_minimo(grafo, origen, destino):
-    distancias = {nodo: float('inf') for nodo in grafo.sucursales.values()}
-    previos = {nodo: None for nodo in grafo.sucursales.values()}
-    distancias[grafo.sucursales[origen]] = 0
-    
-    cola = [(0, grafo.sucursales[origen])]  # (distancia, nodo)
+        if opcion == '1':
+            nombre = input("Nombre de la nueva sucursal: ")
+            grafo.agregar_nodo(nombre)
 
-    while cola:
-        distancia_actual, nodo_actual = heapq.heappop(cola)
+        elif opcion == '2':
+            nombre = input("Nombre de la sucursal a eliminar: ")
+            grafo.eliminar_nodo(nombre)
 
-        if nodo_actual.nombre == destino:
+        elif opcion == '3':
+            origen = input("Sucursal origen: ")
+            destino = input("Sucursal destino: ")
+            peso = float(input("Distancia (peso): "))
+            grafo.agregar_arista(origen, destino, peso)
+
+        elif opcion == '4':
+            origen = input("Sucursal origen: ")
+            destino = input("Sucursal destino: ")
+            grafo.eliminar_arista(origen, destino)
+
+        elif opcion == '5':
+            inicio = input("Sucursal de inicio: ")
+            destino = input("Sucursal destino: ")
+            if inicio not in grafo.nodos or destino not in grafo.nodos:
+                print("Una o ambas sucursales no existen.")
+            else:
+                distancias, anteriores = grafo.dijkstra(inicio)
+                camino = reconstruir_camino(anteriores, inicio, destino)
+            if camino:
+                print(f"Ruta más corta de {inicio} a {destino}: {' -> '.join(camino)}")
+                print(f"Distancia total: {distancias[destino]}")
+                grafo.visualizar_camino(camino)
+            else:
+                print(f"No hay camino disponible de {inicio} a {destino}.")
+
+        elif opcion == '6':
+            grafo.visualizar_grafo()
+
+        elif opcion == '0':
+            print("Saliendo del sistema...")
             break
-        
-        if distancia_actual > distancias[nodo_actual]:
-            continue
-        
-        for arista in grafo.relaciones.get(nodo_actual, []):
-            vecino = arista.elemento
-            peso = arista.peso
-            distancia_nueva = distancia_actual + peso
-            
-            if distancia_nueva < distancias[vecino]:
-                distancias[vecino] = distancia_nueva
-                previos[vecino] = nodo_actual
-                heapq.heappush(cola, (distancia_nueva, vecino))
-    
-    # Reconstruir camino desde destino hacia origen
-    camino = []
-    actual = grafo.sucursales[destino]
-    while actual:
-        camino.append(actual)
-        actual = previos[actual]
-    camino.reverse()
-    
-    return camino, distancias[grafo.sucursales[destino]]
 
+        else:
+            print("Opción no válida, intenta de nuevo.")
 
-# Crear un grafo no dirigido
-g = Grafo()
-# Crear nodos (sucursales) predefinidos
-nodos = [
-    Nodo(1, 1, "Sucursal A"),
-    Nodo(3, 5, "Sucursal B"),
-    Nodo(6, 2, "Sucursal C"),
-    Nodo(8, 8, "Sucursal D")
-]
+# Crear el grafo y agregar nodos/conexiones iniciales
+grafo = Grafo()
+grafo.agregar_arista('A', 'B', 5)
+grafo.agregar_arista('A', 'C', 10)
+grafo.agregar_arista('B', 'D', 3)
+grafo.agregar_arista('C', 'D', 4)
+grafo.agregar_arista('D', 'E', 2)
+grafo.agregar_arista('B', 'E', 9)
 
-print(g.grafo)  # {'A': ['B', 'C'], 'B': ['A', 'D'], 'C': ['A'], 'D': ['B']}
-print(g.obtener_vecinos("A"))  # ['B', 'C']
-
+menu(grafo)
