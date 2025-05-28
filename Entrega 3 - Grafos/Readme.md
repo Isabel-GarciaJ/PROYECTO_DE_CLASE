@@ -18,7 +18,7 @@ En esta etapa se mejoró el sistema incorporando restricciones logísticas más 
 3. Reabastecimiento de sucursales y gestión dinámica.
 En la tercera etapa, el enfoque del sistema se amplió para el proceso de reabastecimiento entre la bodega central y las distintas sucursales del supermercado. Para ello se implementó una estructura basada en grafos, lo que permitió representar y calcular las rutas más cortas entre nodos (bodega y sucursales). Además, se incorporaron funciones que permiten eliminar sucursales clausuradas y añadir nuevas ubicaciones al sistema, haciendo del programa una herramienta más flexible para la administración logística del supermercado.
 
-## Contextualización del Problema 
+## Contextualización del Problema - Tercera Entrega
 El proyecto tiene como objetivo diseñar e implementar un sistema que permita encontrar la ruta más corta para realizar una entrega. El supermercado "La Última Lágrima" cuenta con una bodega, la cual reparte suministros para reabastecer las diferentes sucursales de este supermercado.
 Este programa ayudará a los domiciliarios a conocer la ruta más corta para completar los pedidos que deben ser entregados a las sucursales que lo requieran. También permitirá eliminar las sucursales clausuradas y añadir las nuevas sucursales.
 
