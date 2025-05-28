@@ -22,15 +22,17 @@ class Nodo:
         return len(self.vecinos)
     
     def str_direccion(self):
+        calle, carrera, nlocal = self.direccion
         return str("calle ", self.calle, " #", self.carrera, " - ", self.nlocal)
     
     def __str__(self):
+        calle, carrera, nlocal = self.direccion
         return str("El local ", self.nombre, " ubicado en la calle ", self.calle, " #", self.carrera, " - ", self.nlocal)
     
 #calcular la distancia entre nodos
 def calcular_distancia(nodo1, nodo2):
     x, y, z = nodo1.direccion
-    a, b, c= nodo2.direccion
+    a, b, c = nodo2.direccion
     dx = abs(a - x)
     dy = abs(b - y)
     l = dx * 0.1 + dy * 0.1 # 0,1 metros constituyen a aproximadamente una cuadra
@@ -155,7 +157,6 @@ def ruta_entrega(grafo, nodo_inicial):
     no_entregados.remove(nodo_actual.nombre)
 
     while no_entregados:
-        
         dist_min = float('inf')
         knn = None
         
@@ -168,7 +169,7 @@ def ruta_entrega(grafo, nodo_inicial):
 
         ruta.append(knn)
         nodo_actual = knn
-        no_entregados.remove(knn)
+        no_entregados.remove(knn.nombre)
 
     return ruta
 
@@ -228,7 +229,9 @@ def menu(grafo):
             grafo.visualizar_grafo()
         
         elif opcion == '7':
-            print(ruta_entrega(grafo, E))
+            print("Calculando ruta de entrega desde 'La ultima lagrima'...")
+            ruta = ruta_entrega(grafo, grafo.nodos["La ultima lagrima"])
+            print(" -> ".join([n.nombre for n in ruta]))
 
         elif opcion == '0':
             print("Saliendo del sistema...")
