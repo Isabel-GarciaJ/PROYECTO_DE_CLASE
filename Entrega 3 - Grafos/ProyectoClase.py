@@ -193,7 +193,7 @@ def menu(grafo):
             calle = int(input("Ingrese la calle: "))
             carrera = int(input("Ingrese la carrera: "))
             nlocal = int(input("Ingrese el numero del local:"))
-            grafo.agregar_sucursal(Nodo(nombre, calle,carrera, nlocal))
+            agregar_sucursal(Nodo(nombre, calle,carrera, nlocal))
 
         elif opcion == '2':
             nombre = input("Nombre de la sucursal a eliminar: ")
