@@ -183,11 +183,10 @@ def menu(grafo):
         print("\n--- MENÚ ---")
         print("1. Agregar sucursal")
         print("2. Eliminar sucursal")
-        print("3. Agregar conexión entre sucursales")
-        print("4. Eliminar conexión")
-        print("5. Calcular rutas desde una sucursal")
-        print("6. Visualizar grafo")
-        print("7. Ruta de entrega")
+        print("3. Eliminar conexión")
+        print("4. Calcular rutas desde una sucursal")
+        print("5. Visualizar grafo")
+        print("6. Ruta de entrega")
         print("0. Salir")
 
         opcion = input("Selecciona una opción: ")
@@ -206,15 +205,9 @@ def menu(grafo):
         elif opcion == '3':
             origen = input("Sucursal origen: ")
             destino = input("Sucursal destino: ")
-            peso = float(input("Distancia (peso): "))
-            grafo.agregar_arista(origen, destino)
-
-        elif opcion == '4':
-            origen = input("Sucursal origen: ")
-            destino = input("Sucursal destino: ")
             grafo.eliminar_arista(origen, destino)
 
-        elif opcion == '5':
+        elif opcion == '4':
             inicio = input("Sucursal de inicio: ")
             destino = input("Sucursal destino: ")
             if inicio not in grafo.nodos or destino not in grafo.nodos:
@@ -229,10 +222,10 @@ def menu(grafo):
             else:
                 print(f"No hay camino disponible de {inicio} a {destino}.")
 
-        elif opcion == '6':
+        elif opcion == '5':
             grafo.visualizar_grafo()
         
-        elif opcion == '7':
+        elif opcion == '6':
             print(ruta_entrega(grafo, E))
 
         elif opcion == '0':
