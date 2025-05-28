@@ -1,5 +1,6 @@
 import math
 import heapq
+from collections import deque
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -22,6 +23,7 @@ class Nodo:
     
     def str_direccion(self):
         return str("calle ", self.calle, " #", self.carrera, " - ", self.nlocal)
+    
     def __str__(self):
         return str("El local ", self.nombre, " ubicado en la calle ", self.calle, " #", self.carrera, " - ", self.nlocal)
     
@@ -31,8 +33,8 @@ def calcular_distancia(nodo1, nodo2):
     a, b, c= nodo2.direccion
     dx = abs(a - x)
     dy = abs(b - y)
-    dz = abs(c-z)
-    return int(math.sqrt(dx**2 + dy**2 + dz**2))
+    l = dx * 0.1 + dy * 0.1 # 0,1 metros constituyen a aproximadamente una cuadra
+    return l
 
 class Grafo:
     def __init__(self):
@@ -144,7 +146,32 @@ def reconstruir_camino(anteriores, inicio, destino):
             return camino
         else:
             return None  # No hay camino
+
+def ruta_entrega(grafo, nodo_inicial):
+    ruta = []
+    no_entregados = set(grafo.nodos.keys())  
+    nodo_actual = nodo_inicial
+    ruta.append(nodo_actual.nombre)
+    no_entregados.remove(nodo_actual.nombre)
+
+    while no_entregados:
         
+        dist_min = float('inf')
+        knn = None
+        
+        for nombre in no_entregados:
+            otro_nodo = grafo.nodos[nombre]
+            dist = calcular_distancia(nodo_actual, otro_nodo)
+            if dist < dist_min:
+                dist_min = dist
+                knn = otro_nodo
+
+        ruta.append(knn)
+        nodo_actual = knn
+        no_entregados.remove(knn)
+
+    return ruta
+
 # Sistema de interacción por consola
 def menu(grafo):
     while True:
@@ -155,6 +182,7 @@ def menu(grafo):
         print("4. Eliminar conexión")
         print("5. Calcular rutas desde una sucursal")
         print("6. Visualizar grafo")
+        print("7. Ruta de entrega")
         print("0. Salir")
 
         opcion = input("Selecciona una opción: ")
@@ -164,7 +192,7 @@ def menu(grafo):
             calle = int(input("Ingrese la calle: "))
             carrera = int(input("Ingrese la carrera: "))
             nlocal = int(input("Ingrese el numero del local:"))
-            grafo.agregar_nodo(Nodo(nombre, calle,carrera, nlocal))
+            grafo.agregar_sucursal(Nodo(nombre, calle,carrera, nlocal))
 
         elif opcion == '2':
             nombre = input("Nombre de la sucursal a eliminar: ")
@@ -173,6 +201,7 @@ def menu(grafo):
         elif opcion == '3':
             origen = input("Sucursal origen: ")
             destino = input("Sucursal destino: ")
+            peso = float(input("Distancia (peso): "))
             grafo.agregar_arista(origen, destino)
 
         elif opcion == '4':
@@ -197,6 +226,9 @@ def menu(grafo):
 
         elif opcion == '6':
             grafo.visualizar_grafo()
+        
+        elif opcion == '7':
+            print(ruta_entrega(grafo, E))
 
         elif opcion == '0':
             print("Saliendo del sistema...")
