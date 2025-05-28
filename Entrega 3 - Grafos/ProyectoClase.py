@@ -35,8 +35,8 @@ def calcular_distancia(nodo1, nodo2):
     a, b, c = nodo2.direccion
     dx = abs(a - x)
     dy = abs(b - y)
-    l = dx * 0.1 + dy * 0.1 # 0,1 metros constituyen a aproximadamente una cuadra
-    return l
+    d = dx * 0.1 + dy * 0.1 # 0,1 metros constituyen a aproximadamente una cuadra
+    return d
 
 class Grafo:
     def __init__(self):
@@ -96,7 +96,11 @@ class Grafo:
                 if not G.has_edge(nombre, vecino):
                     G.add_edge(nombre, vecino, weight=peso)
         pos = nx.spring_layout(G)
-        labels = nx.get_edge_attributes(G, 'weight')
+        pesos = nx.get_edge_attributes(G, 'weight')
+        labels = {}
+        for arista, peso in pesos.items():
+            labels[arista] = int(round(peso))
+            
         nx.draw(G, pos, with_labels=True, node_color='skyblue', node_size=2000, font_size=10, font_weight='bold')
         nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
         plt.title("Red de Entrega - Supermercado La Última Lágrima")
