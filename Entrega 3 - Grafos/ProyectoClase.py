@@ -35,8 +35,8 @@ def calcular_distancia(nodo1, nodo2):
     a, b, c = nodo2.direccion
     dx = abs(a - x)
     dy = abs(b - y)
-    d = dx * 0.1 + dy * 0.1 # 0,1 metros constituyen a aproximadamente una cuadra
-    return d
+    #d = dx * 0.1 + dy * 0.1 # 0,1 metros constituyen a aproximadamente una cuadra
+    return dx + dy
 
 class Grafo:
     def __init__(self):
@@ -171,7 +171,7 @@ def ruta_entrega(grafo, nodo_inicial):
                 dist_min = dist
                 knn = otro_nodo
 
-        ruta.append(knn)
+        ruta.append(knn.nombre)
         nodo_actual = knn
         no_entregados.remove(knn.nombre)
 
@@ -197,7 +197,7 @@ def menu(grafo):
             calle = int(input("Ingrese la calle: "))
             carrera = int(input("Ingrese la carrera: "))
             nlocal = int(input("Ingrese el numero del local:"))
-            agregar_sucursal(Nodo(nombre, calle,carrera, nlocal))
+            agregar_sucursal(grafo, Nodo(nombre, calle,carrera, nlocal))
 
         elif opcion == '2':
             nombre = input("Nombre de la sucursal a eliminar: ")
@@ -233,9 +233,7 @@ def menu(grafo):
             grafo.visualizar_grafo()
         
         elif opcion == '7':
-            print("Calculando ruta de entrega desde 'La ultima lagrima'...")
-            ruta = ruta_entrega(grafo, grafo.nodos["La ultima lagrima"])
-            print(" -> ".join([n.nombre for n in ruta]))
+            print(ruta_entrega(grafo, E))
 
         elif opcion == '0':
             print("Saliendo del sistema...")
