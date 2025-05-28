@@ -27,6 +27,8 @@ Las librerías de python que fueron usadas son:
 
 - math: Es un módulo estándar que proporciona funciones matemáticas para trabajar con números reales. Se utiliza cuando necesitas hacer cálculos matemáticos más avanzados que los que puedes hacer con operadores básicos
 - deque: Es una estructura de datos optimizada para insertar y eliminar elementos rápidamente desde ambos extremos, a diferencia de una lista y se encuentra dentro del módulo collections.
+- networkx: es una librería que permite modelar grafos (redes de nodos y aristas) y aplicar sobre ellos algoritmos como búsqueda de rutas más cortas, recorrido de grafos y análisis de conectividad. Es útil para representar sistemas como mapas, redes de transporte o estructuras de datos complejas.
+- matplotlib.pyplot: es una librería de visualización gráfica que proporciona funciones para crear gráficos de líneas, barras, dispersión, histogramas, etc. Es ampliamente usada para visualizar datos y también para representar gráficamente grafos.
 
 ## Integrantes del Grupo:
 - 2240079 – Isabel Sofía García Joya 
